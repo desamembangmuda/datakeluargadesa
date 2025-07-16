@@ -13,7 +13,7 @@ import json
 def get_sheet(sheet_name):
     service_account_info = json.loads(st.secrets["GOOGLE_SERVICE_ACCOUNT"])
     creds = ServiceAccountCredentials.from_json_keyfile_dict(service_account_info, scope)
-    return client.open_by_key("1OjCLeZmypzFvThwmKF2PjheHU2NKedQbw9qzt8joKvs").worksheet(Anggota)
+    return client.open_by_key("1OjCLeZmypzFvThwmKF2PjheHU2NKedQbw9qzt8joKvs").worksheet(sheet_name)
 
 def ambil_data_anggota():
     sheet = get_sheet("Anggota")
