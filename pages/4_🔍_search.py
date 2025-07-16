@@ -64,7 +64,7 @@ if no_kk_input:
                 with st.container():
                     cols = st.columns([3, 1, 1, 1])
                     with cols[0]:
-                        st.write(f"**{row['nama']}** — NIK: `{row['nik']}` — {row['shdk']}")
+                        st.write(f"**{row['nama']}** — NIK: {row['nik']} — {row['shdk']}")
 
                     with cols[1]:
                         if st.button("✏️ Edit", key=f"edit_{row['nik']}"):
@@ -127,8 +127,8 @@ if no_kk_input:
                         del st.session_state[k]
                 st.switch_page("pages/2_👪_form_anggota.py")
 
-                            except Exception as e:
-                                st.error(f"❌ Gagal memuat data: {e}")
+    except Exception as e:
+        st.error(f"❌ Gagal memuat data: {e}")
 
 # 🗑️ Konfirmasi Hapus
 if "konfirmasi_hapus_nik" in st.session_state:
@@ -136,7 +136,7 @@ if "konfirmasi_hapus_nik" in st.session_state:
     df_anggota = ambil_data_anggota()
     nama_target = df_anggota[df_anggota['nik'] == nik_target].iloc[0]['nama']
     with st.expander("⚠️ Konfirmasi Hapus", expanded=True):
-        st.error(f"Apakah kamu yakin ingin menghapus anggota **{nama_target}** (NIK: `{nik_target}`)?")
+        st.error(f"Apakah kamu yakin ingin menghapus anggota **{nama_target}** (NIK: {nik_target})?")
         col_a, col_b = st.columns([1, 1])
         with col_a:
             if st.button("✅ Ya, Hapus"):
