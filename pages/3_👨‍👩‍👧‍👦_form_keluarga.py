@@ -10,7 +10,6 @@ if "login" not in st.session_state or not st.session_state["login"]:
 
 # ========= KONEKSI SHEETS =========
 def connect_sheet():
-    from oauth2client.service_account import ServiceAccountCredentials
     service_account_info = json.loads(st.secrets["GOOGLE_SERVICE_ACCOUNT"])
     creds = ServiceAccountCredentials.from_json_keyfile_dict(service_account_info, scope)
     spreadsheet_id = "1OjCLeZmypzFvThwmKF2PjheHU2NKedQbw9qzt8joKvs"
