@@ -1,0 +1,19 @@
+users:
+  admin:
+    name: admin
+    password: $2b$12$ynWObWYHdXHIFNzAtMAubuOaGS8hWA7YwqsMQPklo4pfVC8BdHDnu
+  petugas:
+    name: petugas
+    password: $2b$12$5kSQ1kSKeX9MkZeEaWJaOeZuzQnbLRM7fZvRWd06P2PLNtWt8/vo6
+  petugas1:
+    name: petugas2
+    password: $2b$12$zwYNRRy72e4Ly4r3QidVoObh1zKbqk3/5o9lSGuYvgiankcDJ4QYK
+  petugas2:
+    name: petugas3
+    password: $2b$12$FI5EKvRfEhmF8EyRPaK0cueXTkjhnTltG0/ITbrT70UzhMg.mlGKi
+  petugas3:
+    name: petugas4
+    password: $2b$12$zr0MWMxslba2Jv6YG0hUg.zqZH.Y2XxHRLQX0o5Ng8W02y8GgJWfm
+  petugas4:
+    name: petugas5
+    password: $2b$12$77xVaUTXEWC4hvCbNjGYN.Bt2A9heG5ewuF9DG5dBBgBfAoqxkYI2
