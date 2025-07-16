@@ -5,7 +5,6 @@ if "login" not in st.session_state or not st.session_state["login"]:
 
 import gspread
 import pandas as pd
-import traceback
 from oauth2client.service_account import ServiceAccountCredentials
 from datetime import datetime
 
