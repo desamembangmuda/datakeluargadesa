@@ -128,9 +128,8 @@ if no_kk_input:
                         del st.session_state[k]
                 st.switch_page("pages/2_👪_form_anggota.py")
 
-        except Exception as e:
-            st.error("❌ Gagal memuat data:")
-            st.text(traceback.format_exc())
+      except Exception as e:
+        st.error(f"❌ Gagal memuat data: {e}"))
 
 # 🗑️ Konfirmasi Hapus
 if "konfirmasi_hapus_nik" in st.session_state:
