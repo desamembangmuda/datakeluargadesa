@@ -26,10 +26,10 @@ def parse_tanggal_lahir(tgl_str):
             return date.today()
 
 def get_sheet():
-    scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-    creds = ServiceAccountCredentials.from_json_keyfile_name("service_account.json", scope)
-    client = gspread.authorize(creds)
-    return client.open_by_key("1LOv15OJL__vKiok8qmJqPGt4Je4nmxVSV0_a0ed8L5w").worksheet("Anggota")
+    from oauth2client.service_account import ServiceAccountCredentials
+    service_account_info = json.loads(st.secrets["GOOGLE_SERVICE_ACCOUNT"])
+    creds = ServiceAccountCredentials.from_json_keyfile_dict(service_account_info, scope)
+    return client.open_by_key("1OjCLeZmypzFvThwmKF2PjheHU2NKedQbw9qzt8joKvs").worksheet("Anggota")
 
 def cek_nik_ganda(nik_baru):
     sheet = get_sheet()
