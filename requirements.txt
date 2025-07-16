@@ -3,3 +3,6 @@ pandas
 openpyxl
 gspread
 oauth2client
+bcrypt
+PyYAML
+python-dateutil
