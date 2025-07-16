@@ -1,7 +1,6 @@
 import streamlit as st
 import gspread
 import pandas as pd
-import json
 from datetime import datetime
 from oauth2client.service_account import ServiceAccountCredentials
 
