@@ -5,6 +5,7 @@ if "login" not in st.session_state or not st.session_state["login"]:
 
 import gspread
 import pandas as pd
+import traceback
 from oauth2client.service_account import ServiceAccountCredentials
 from datetime import datetime
 
@@ -127,8 +128,9 @@ if no_kk_input:
                         del st.session_state[k]
                 st.switch_page("pages/2_👪_form_anggota.py")
 
-    except Exception as e:
-        st.error(f"❌ Gagal memuat data: {e}")
+        except Exception as e:
+            st.error("❌ Gagal memuat data:")
+            st.text(traceback.format_exc())
 
 # 🗑️ Konfirmasi Hapus
 if "konfirmasi_hapus_nik" in st.session_state:
