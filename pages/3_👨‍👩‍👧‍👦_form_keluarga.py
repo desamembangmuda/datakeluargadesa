@@ -10,14 +10,10 @@ if "login" not in st.session_state or not st.session_state["login"]:
 
 # ========= KONEKSI SHEETS =========
 def connect_sheet():
-    scope = [
-        "https://spreadsheets.google.com/feeds",
-        "https://www.googleapis.com/auth/drive"
-    ]
-    creds = ServiceAccountCredentials.from_json_keyfile_dict(
-        st.secrets["google_service_account"], scope)
-    client = gspread.authorize(creds)
-    spreadsheet_id = "1LOv15OJL__vKiok8qmJqPGt4Je4nmxVSV0_a0ed8L5w"
+    from oauth2client.service_account import ServiceAccountCredentials
+    service_account_info = json.loads(st.secrets["GOOGLE_SERVICE_ACCOUNT"])
+    creds = ServiceAccountCredentials.from_json_keyfile_dict(service_account_info, scope)
+    spreadsheet_id = "1OjCLeZmypzFvThwmKF2PjheHU2NKedQbw9qzt8joKvs"
     sheet = client.open_by_key(spreadsheet_id).worksheet("Keluarga")
     return sheet
 
