@@ -1,5 +1,4 @@
 import streamlit as st
-import json
 if "login" not in st.session_state or not st.session_state["login"]:
     st.warning("⚠️ Silakan login terlebih dahulu.")
     st.stop()
@@ -13,6 +12,7 @@ from datetime import datetime
 def get_sheet(sheet_name):
     service_account_info = json.loads(st.secrets["GOOGLE_SERVICE_ACCOUNT"])
     creds = ServiceAccountCredentials.from_json_keyfile_dict(service_account_info, scope)
+    client = gspread.authorize(creds)
     return client.open_by_key("1OjCLeZmypzFvThwmKF2PjheHU2NKedQbw9qzt8joKvs").worksheet(sheet_name)
 
 def ambil_data_anggota():
