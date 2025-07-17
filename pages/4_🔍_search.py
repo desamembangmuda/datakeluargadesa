@@ -9,20 +9,28 @@ if "login" not in st.session_state or not st.session_state["login"]:
     st.warning("⚠️ Silakan login terlebih dahulu.")
     st.stop()
 
-# 📄 Google Sheets Access
+ 🔐 Google Sheets Setup
 def get_sheet(sheet_name):
     try:
-        scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-        creds = ServiceAccountCredentials.from_json_keyfile_dict(
-            dict(st.secrets["GOOGLE_SERVICE_ACCOUNT"]), scope
-        )
+        scope = [
+            "https://spreadsheets.google.com/feeds",
+            "https://www.googleapis.com/auth/drive"
+        ]
+
+        service_account_info = st.secrets["GOOGLE_SERVICE_ACCOUNT"]
+
+        # Debug client_email
+        st.write("🔐 client_email:", service_account_info["client_email"])
+
+        creds = ServiceAccountCredentials.from_json_keyfile_dict(service_account_info, scope)
         client = gspread.authorize(creds)
-        spreadsheet_id = "1OjCLeZmypzFvThwmKF2PjheHU2NKedQbw9qzt8joKvs"
-        return client.open_by_key(spreadsheet_id).worksheet(sheet_name)
+        sheet = client.open_by_key("1OjCLeZmypzFvThwmKF2PjheHU2NKedQbw9qzt8joKvs").worksheet(sheet_name)
+        return sheet
+
     except Exception as e:
         st.error("❌ Terjadi kesalahan saat mengakses Google Sheet.")
         st.code(str(e))
-        st.stop()
+        return None
 
 def ambil_data(sheet_name):
     try:
