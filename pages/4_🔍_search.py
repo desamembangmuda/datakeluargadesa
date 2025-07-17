@@ -16,7 +16,7 @@ def get_sheet(sheet_name):
     client = gspread.authorize(creds)
     spreadsheet_id = "1OjCLeZmypzFvThwmKF2PjheHU2NKedQbw9qzt8joKvs"
     sheet = client.open_by_key(spreadsheet_id).worksheet(sheet_name)
-    return shee
+    return sheet
     
 def ambil_data_anggota():
     sheet = get_sheet("Anggota")
