@@ -11,9 +11,12 @@ if "login" not in st.session_state or not st.session_state["login"]:
 # 🔐 Google Sheets Setup
 def get_sheet(sheet_name):
     scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-    creds = ServiceAccountCredentials.from_json_keyfile_dict(st.secrets["GOOGLE_SERVICE_ACCOUNT"], scope)
+    service_account_info = dict(st.secrets["GOOGLE_SERVICE_ACCOUNT"])
+    creds = ServiceAccountCredentials.from_json_keyfile_dict(service_account_info, scope)
     client = gspread.authorize(creds)
-    return client.open_by_key("1OjCLeZmypzFvThwmKF2PjheHU2NKedQbw9qzt8joKvs").worksheet(sheet_name)
+    spreadsheet_id = "1OjCLeZmypzFvThwmKF2PjheHU2NKedQbw9qzt8joKvs"
+    sheet = client.open_by_key(spreadsheet_id).worksheet(sheet_name)
+    return shee
     
 def ambil_data_anggota():
     sheet = get_sheet("Anggota")
@@ -125,6 +128,10 @@ if no_kk_input:
                     if k.startswith("edit_"):
                         del st.session_state[k]
                 st.switch_page("pages/2_👪_form_anggota.py")
+                
+        try:
+        sheet = get_sheet("Keluarga")  # atau nama sheet yang benar
+        st.success("✅ Sukses terhubung ke Google Sheet!")
         
     except Exception as e:
         st.error(f"❌ Gagal memuat data: {e}")
