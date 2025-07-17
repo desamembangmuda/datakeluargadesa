@@ -1,8 +1,16 @@
 import streamlit as st
 import gspread
 import pandas as pd
+import json
 from datetime import datetime
 from oauth2client.service_account import ServiceAccountCredentials
+
+
+try:
+    st.write("🔑 Key client_email:", st.secrets["GOOGLE_SERVICE_ACCOUNT"]["client_email"])
+except Exception as e:
+    st.error("❌ Tidak bisa akses secret GOOGLE_SERVICE_ACCOUNT.")
+    st.code(str(e))
 
 if "login" not in st.session_state or not st.session_state["login"]:
     st.warning("⚠️ Silakan login terlebih dahulu.")
@@ -11,9 +19,13 @@ if "login" not in st.session_state or not st.session_state["login"]:
 # 🔐 Google Sheets Setup
 def get_sheet(sheet_name):
     scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-    service_account_info = dict(st.secrets["GOOGLE_SERVICE_ACCOUNT"])
+    
+    # KONVERSI dari AttrDict ke dict JSON
+    service_account_info = json.loads(st.secrets["GOOGLE_SERVICE_ACCOUNT"].to_json())
+    
     creds = ServiceAccountCredentials.from_json_keyfile_dict(service_account_info, scope)
     client = gspread.authorize(creds)
+    
     spreadsheet_id = "1OjCLeZmypzFvThwmKF2PjheHU2NKedQbw9qzt8joKvs"
     sheet = client.open_by_key(spreadsheet_id).worksheet(sheet_name)
     return sheet
