@@ -9,29 +9,54 @@ if "login" not in st.session_state or not st.session_state["login"]:
     st.warning("⚠️ Silakan login terlebih dahulu.")
     st.stop()
 
-# 🔐 Tampilkan client_email untuk memastikan kredensial terbaca
 try:
     st.write("🔐 client_email:", st.secrets["GOOGLE_SERVICE_ACCOUNT"]["client_email"])
 except Exception as e:
-    st.error("❌ Tidak bisa membaca client_email dari secrets.")
+    st.error("❌ Tidak bisa akses secret `GOOGLE_SERVICE_ACCOUNT`.")
     st.code(str(e))
     st.stop()
 
-# 📄 Fungsi akses Google Sheet
-def get_sheet(sheet_name):
+# Setup koneksi Google Sheets
+def get_worksheet(sheet_url, worksheet_name):
     try:
         scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-        service_account_info = dict(st.secrets["GOOGLE_SERVICE_ACCOUNT"])
-        creds = ServiceAccountCredentials.from_json_keyfile_dict(service_account_info, scope)
+        creds = ServiceAccountCredentials.from_json_keyfile_dict(
+            st.secrets["GOOGLE_SERVICE_ACCOUNT"], scope)
         client = gspread.authorize(creds)
-
-        # ID spreadsheet kamu
-        spreadsheet_id = "1OjCLeZmypzFvThwmKF2PjheHU2NKedQbw9qzt8joKvs"
-        return client.open_by_key(spreadsheet_id).worksheet(sheet_name)
+        spreadsheet = client.open_by_url(sheet_url)
+        worksheet = spreadsheet.worksheet(worksheet_name)
+        return worksheet
     except Exception as e:
-        st.error(f"❌ Gagal mengakses Google Sheet: {sheet_name}")
+        st.error(f"❌ Gagal mengakses Google Sheet: {worksheet_name}")
         st.code(str(e))
-        st.stop()
+        return None
+
+# Ganti sesuai URL & worksheet
+sheet_url = "https://docs.google.com/spreadsheets/d/1OjCLeZmypzFvThwmKF2PjheHU2NKedQbw9qzt8joKvs/edit?gid=0#gid=0"
+
+# Tampilkan Data Keluarga
+st.subheader("👨‍👩‍👧‍👦 Tabel Data Keluarga")
+worksheet_keluarga = get_worksheet(sheet_url, "data_keluarga")
+if worksheet_keluarga:
+    try:
+        data_keluarga = worksheet_keluarga.get_all_records()
+        df_keluarga = pd.DataFrame(data_keluarga)
+        st.dataframe(df_keluarga)
+    except Exception as e:
+        st.error("❌ Gagal memuat data: data_keluarga")
+        st.code(str(e))
+
+# Tampilkan Data Anggota
+st.subheader("🧍‍♂️ Tabel Anggota Keluarga")
+worksheet_anggota = get_worksheet(sheet_url, "Anggota")
+if worksheet_anggota:
+    try:
+        data_anggota = worksheet_anggota.get_all_records()
+        df_anggota = pd.DataFrame(data_anggota)
+        st.dataframe(df_anggota)
+    except Exception as e:
+        st.error("❌ Gagal memuat data: Anggota")
+        st.code(str(e))
 
 def ambil_data(sheet_name):
     try:
