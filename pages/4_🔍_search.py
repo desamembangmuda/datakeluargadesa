@@ -7,35 +7,33 @@ from oauth2client.service_account import ServiceAccountCredentials
 # Fungsi untuk mendapatkan worksheet
 def get_sheet(sheet_name):
     try:
-        scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-        creds = ServiceAccountCredentials.from_json_keyfile_dict(
-            dict(st.secrets["GOOGLE_SERVICE_ACCOUNT"]), scope
-        )
+        # Scope untuk akses Google Sheets dan Drive
+        scope = [
+            "https://spreadsheets.google.com/feeds",
+            "https://www.googleapis.com/auth/drive"
+        ]
+
+        # Ambil kredensial dari secrets (pastikan format TOML benar)
+        service_account_info = dict(st.secrets["GOOGLE_SERVICE_ACCOUNT"])
+        
+        # Buat credentials dan client
+        creds = ServiceAccountCredentials.from_json_keyfile_dict(service_account_info, scope)
         client = gspread.authorize(creds)
-        sheet = client.open_by_key("1OjCLeZmypzFvThwmKF2PjheHU2NKedQbw9qzt8joKvs").worksheet(sheet_name)
+
+        # Ganti dengan ID spreadsheet kamu yang benar
+        spreadsheet_id = "1OjCLeZmypzFvThwmKF2PjheHU2NKedQbw9qzt8joKvs"
+        sheet = client.open_by_key(spreadsheet_id).worksheet(sheet_name)
+
         return sheet
-    except Exception as e:
-        st.error("❌ Gagal mengakses Google Sheet.")
+    
+    except KeyError as e:
+        st.error("❌ Gagal memuat data: Ada kesalahan pada kunci secrets.")
         st.code(str(e))
-        st.stop()
-
-# Fungsi untuk memuat data dari worksheet ke DataFrame
-def load_data(sheet_name="Keluarga"):
-    try:
-        sheet = get_sheet(sheet_name)
-        data = sheet.get_all_records()
-        df = pd.DataFrame(data)
-
-        if "no kk" not in df.columns:
-            st.error("❌ Kolom 'no kk' tidak ditemukan. Pastikan header kolom benar.")
-            st.write("Kolom yang tersedia:", df.columns.tolist())
-            st.stop()
-
-        return df
+    except gspread.exceptions.SpreadsheetNotFound:
+        st.error("❌ Gagal mengakses Google Sheet. Spreadsheet tidak ditemukan.")
     except Exception as e:
-        st.error("❌ Gagal memuat data:")
+        st.error("❌ Terjadi kesalahan saat mengakses Google Sheet.")
         st.code(str(e))
-        st.stop()
 
 # -----------------------------
 # 📥 Ambil data
