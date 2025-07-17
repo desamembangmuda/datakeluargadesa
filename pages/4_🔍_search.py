@@ -16,7 +16,7 @@ def get_sheet(Anggota):
     return client.open_by_key("1OjCLeZmypzFvThwmKF2PjheHU2NKedQbw9qzt8joKvs").worksheet(Anggota)
     
 def ambil_data_anggota():
-    sheet = get_sheet("Anggota")
+    sheet = get_sheet(Anggota)
     data = sheet.get_all_values()
     df = pd.DataFrame(data[1:], columns=[col.lower().strip() for col in data[0]])
     df['no kk'] = df['no kk'].str.strip()
@@ -30,7 +30,7 @@ def ambil_data_keluarga():
     return df
 
 def hapus_berdasarkan_nik(nik):
-    sheet = get_sheet("Anggota")
+    sheet = get_sheet(Anggota)
     col_nik = sheet.col_values(5)
     for idx, val in enumerate(col_nik):
         if val.strip() == nik:
