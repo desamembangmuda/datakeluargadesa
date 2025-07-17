@@ -10,12 +10,12 @@ if "login" not in st.session_state or not st.session_state["login"]:
 
 # ========= KONEKSI SHEETS =========
 def connect_sheet():
-    service_account_info = json.loads(st.secrets["GOOGLE_SERVICE_ACCOUNT"])
-    creds = ServiceAccountCredentials.from_json_keyfile_dict(service_account_info, scope)
+    scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"
+    creds = ServiceAccountCredentials.from_json_keyfile_dict(st.secrets["GOOGLE_SERVICE_ACCOUNT"], scope)
     spreadsheet_id = "1OjCLeZmypzFvThwmKF2PjheHU2NKedQbw9qzt8joKvs"
     sheet = client.open_by_key(spreadsheet_id).worksheet("Keluarga")
     return sheet
-
+   
 def is_no_kk_duplicate(no_kk):
     sheet = connect_sheet()
     existing_data = [str(cell).strip() for cell in sheet.col_values(2)]
