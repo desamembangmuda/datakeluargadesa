@@ -6,3 +6,4 @@ oauth2client
 bcrypt
 PyYAML
 python-dateutil
+plotly
