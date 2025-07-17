@@ -68,7 +68,7 @@ def hapus_berdasarkan_nik(nik):
     return False
 
 # --- URL Sheet dan Nama Worksheet ---
-sheet_url = "https://docs.google.com/spreadsheets/d/1OjCLeZmypzFvThwmKF2PjheHU2NKedQbw9qzt8joKvs/edit"
+sheet_url = "https://docs.google.com/spreadsheets/d/1OjCLeZmypzFvThwmKF2PjheHU2NKedQbw9qzt8joKvs/edit?gid=0#gid=0"
 
 # --- Form Input KK ---
 with st.form("form_search"):
