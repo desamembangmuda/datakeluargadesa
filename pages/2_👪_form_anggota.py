@@ -98,7 +98,7 @@ with st.form("form_anggota", clear_on_submit=not st.session_state.edit_mode):
     jk = st.selectbox("Jenis Kelamin", jk_options,
         index=jk_options.index(normalize(st.session_state.get("edit_jk", "Laki-laki"), jk_options, "Laki-laki")))
 
-    tanggal_default = parse_tanggal_lahir(st.session_state.get("edit_tgl", "01/01/2020"))
+    tanggal_default = parse_tanggal_lahir(st.session_state.get("edit_tgl", "01/01/2025"))
     tanggal_lahir = st.date_input("Tanggal Lahir", value=tanggal_default, min_value=date(1945, 1, 1), max_value=date.today())
     umur = hitung_umur(tanggal_lahir)
     st.success(f"Umur: {umur} tahun")
