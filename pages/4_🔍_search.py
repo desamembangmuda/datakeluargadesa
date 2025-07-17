@@ -4,26 +4,7 @@ import pandas as pd
 from datetime import datetime
 from oauth2client.service_account import ServiceAccountCredentials
 
-# -----------------------------
-# ✅ Cek kredensial dari secrets
-# -----------------------------
-try:
-    st.write("🔑 Client email:", st.secrets["GOOGLE_SERVICE_ACCOUNT"]["client_email"])
-except Exception as e:
-    st.error("❌ Gagal membaca secrets. Pastikan sudah diatur di Streamlit Cloud.")
-    st.code(str(e))
-    st.stop()
-
-# -----------------------------
-# ✅ Cek login session
-# -----------------------------
-if "login" not in st.session_state or not st.session_state["login"]:
-    st.warning("⚠️ Silakan login terlebih dahulu.")
-    st.stop()
-
-# -----------------------------
-# 🔐 Fungsi akses Google Sheets
-# -----------------------------
+# Fungsi untuk mendapatkan worksheet
 def get_sheet(sheet_name):
     try:
         scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
@@ -31,20 +12,30 @@ def get_sheet(sheet_name):
             dict(st.secrets["GOOGLE_SERVICE_ACCOUNT"]), scope
         )
         client = gspread.authorize(creds)
-
-        spreadsheet_id = "1OjCLeZmypzFvThwmKF2PjheHU2NKedQbw9qzt8joKvs"
-        spreadsheet = client.open_by_key(spreadsheet_id)
-
-        if sheet_name not in [ws.title for ws in spreadsheet.worksheets()]:
-            st.error(f"❌ Worksheet `{sheet_name}` tidak ditemukan.")
-            return None
-
-        return spreadsheet.worksheet(sheet_name)
-    
+        sheet = client.open_by_key("1OjCLeZmypzFvThwmKF2PjheHU2NKedQbw9qzt8joKvs").worksheet(sheet_name)
+        return sheet
     except Exception as e:
         st.error("❌ Gagal mengakses Google Sheet.")
         st.code(str(e))
-        return None
+        st.stop()
+
+# Fungsi untuk memuat data dari worksheet ke DataFrame
+def load_data(sheet_name="Keluarga"):
+    try:
+        sheet = get_sheet(sheet_name)
+        data = sheet.get_all_records()
+        df = pd.DataFrame(data)
+
+        if "no kk" not in df.columns:
+            st.error("❌ Kolom 'no kk' tidak ditemukan. Pastikan header kolom benar.")
+            st.write("Kolom yang tersedia:", df.columns.tolist())
+            st.stop()
+
+        return df
+    except Exception as e:
+        st.error("❌ Gagal memuat data:")
+        st.code(str(e))
+        st.stop()
 
 # -----------------------------
 # 📥 Ambil data
