@@ -130,7 +130,7 @@ if no_kk_input:
                 st.switch_page("pages/2_👪_form_anggota.py")
                 
         try:
-        sheet = get_sheet("Keluarga")  # atau nama sheet yang benar
+        sheet = get_sheet("Anggota")  # atau nama sheet yang benar
         st.success("✅ Sukses terhubung ke Google Sheet!")
         
     except Exception as e:
