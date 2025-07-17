@@ -125,7 +125,9 @@ if no_kk_input:
                     if k.startswith("edit_"):
                         del st.session_state[k]
                 st.switch_page("pages/2_👪_form_anggota.py")
-
+    try:
+        sheet = get_sheet("Anggota")
+        st.success("✅ Berhasil ambil sheet Anggota")
     except Exception as e:
         st.error(f"❌ Gagal memuat data: {e}")
 
