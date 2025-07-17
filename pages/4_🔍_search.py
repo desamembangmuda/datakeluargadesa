@@ -4,33 +4,32 @@ import pandas as pd
 from datetime import datetime
 from oauth2client.service_account import ServiceAccountCredentials
 
-# 🛡️ Cek login session
+# ✅ Verifikasi Login
 if "login" not in st.session_state or not st.session_state["login"]:
     st.warning("⚠️ Silakan login terlebih dahulu.")
     st.stop()
 
-# 📄 Google Sheets Access
+# 🔐 Tampilkan client_email untuk memastikan kredensial terbaca
+try:
+    st.write("🔐 client_email:", st.secrets["GOOGLE_SERVICE_ACCOUNT"]["client_email"])
+except Exception as e:
+    st.error("❌ Tidak bisa membaca client_email dari secrets.")
+    st.code(str(e))
+    st.stop()
+
+# 📄 Fungsi akses Google Sheet
 def get_sheet(sheet_name):
     try:
         scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-
-        # Ambil kredensial dari secrets
         service_account_info = dict(st.secrets["GOOGLE_SERVICE_ACCOUNT"])
-
-        # 🛠 Debugging - tampilkan client_email untuk verifikasi
-        st.info(f"🔐 client_email: {service_account_info.get('client_email', 'Tidak ditemukan')}")
-
         creds = ServiceAccountCredentials.from_json_keyfile_dict(service_account_info, scope)
         client = gspread.authorize(creds)
 
-        # Pastikan spreadsheet_id benar dan bisa diakses
+        # ID spreadsheet kamu
         spreadsheet_id = "1OjCLeZmypzFvThwmKF2PjheHU2NKedQbw9qzt8joKvs"
-        sheet = client.open_by_key(spreadsheet_id).worksheet(sheet_name)
-
-        return sheet
-
+        return client.open_by_key(spreadsheet_id).worksheet(sheet_name)
     except Exception as e:
-        st.error("❌ Terjadi kesalahan saat mengakses Google Sheet.")
+        st.error(f"❌ Gagal mengakses Google Sheet: {sheet_name}")
         st.code(str(e))
         st.stop()
 
@@ -39,19 +38,27 @@ def ambil_data(sheet_name):
         sheet = get_sheet(sheet_name)
         data = sheet.get_all_values()
         if len(data) < 2:
-            return pd.DataFrame()  # Sheet kosong
+            return pd.DataFrame()  # Kosong
         df = pd.DataFrame(data[1:], columns=[col.lower().strip() for col in data[0]])
+        if 'no kk' not in df.columns:
+            raise ValueError(f"Kolom 'no kk' tidak ditemukan di sheet '{sheet_name}'")
         df['no kk'] = df['no kk'].str.strip()
         return df
     except Exception as e:
-        st.error(f"❌ Gagal memuat data dari sheet '{sheet_name}'.")
+        st.error(f"❌ Gagal memuat data dari sheet '{sheet_name}'")
         st.code(str(e))
         return pd.DataFrame()
+
+def ambil_data_anggota():
+    return ambil_data("Anggota")
+
+def ambil_data_keluarga():
+    return ambil_data("Keluarga")
 
 def hapus_berdasarkan_nik(nik):
     try:
         sheet = get_sheet("Anggota")
-        col_nik = sheet.col_values(5)  # Asumsikan kolom ke-5 adalah 'nik'
+        col_nik = sheet.col_values(5)
         for idx, val in enumerate(col_nik):
             if val.strip() == nik:
                 sheet.delete_rows(idx + 1)
@@ -61,7 +68,7 @@ def hapus_berdasarkan_nik(nik):
         st.code(str(e))
     return False
 
-# 🚀 Streamlit UI
+# 🌐 UI
 st.set_page_config(page_title="Cari Anggota", layout="centered")
 st.title("🔍 Cari Anggota Berdasarkan Nomor KK")
 
@@ -70,24 +77,22 @@ with st.form("form_search"):
     cari = st.form_submit_button("🔎 Cari")
 
 if no_kk_input:
-    df_anggota = ambil_data("Anggota")
-    df_keluarga = ambil_data("Keluarga")
+    df_anggota = ambil_data_anggota()
+    df_keluarga = ambil_data_keluarga()
 
     no_kk_input = no_kk_input.strip()
     hasil_anggota = df_anggota[df_anggota['no kk'] == no_kk_input]
     hasil_keluarga = df_keluarga[df_keluarga['no kk'] == no_kk_input]
-
     nama_kk = hasil_keluarga.iloc[0]['nama kepala keluarga'] if not hasil_keluarga.empty else ""
 
     if not hasil_anggota.empty:
         st.subheader("📋 Tabel Anggota")
 
-        for _, row in hasil_anggota.iterrows():
+        for i, row in hasil_anggota.iterrows():
             with st.container():
                 cols = st.columns([3, 1, 1, 1])
-
                 with cols[0]:
-                    st.write(f"**{row.get('nama', '-') }** — NIK: {row.get('nik', '-')} — {row.get('shdk', '-')}")
+                    st.write(f"**{row['nama']}** — NIK: {row['nik']} — {row['shdk']}")
 
                 with cols[1]:
                     if st.button("✏️ Edit", key=f"edit_{row['nik']}"):
@@ -95,7 +100,7 @@ if no_kk_input:
                         st.session_state.nama_kk = nama_kk
                         st.session_state.edit_mode = True
 
-                        # Simpan semua data ke session_state
+                        # Simpan data ke session
                         st.session_state.edit_no_urut = row.get("no_urut", "")
                         st.session_state.edit_nama = row.get("nama", "")
                         st.session_state.edit_nik = row.get("nik", "")
@@ -109,7 +114,6 @@ if no_kk_input:
                         st.session_state.edit_lapangan = row.get("lapangan usaha", "Pertanian/Pekebunan/Peternakan")
                         st.session_state.edit_catatan = row.get("catatan", "")
 
-                        # Tanggal lahir
                         try:
                             tgl = datetime.strptime(row['tanggal lahir'], "%m/%d/%Y").date()
                         except:
@@ -149,7 +153,7 @@ if no_kk_input:
 # 🗑️ Konfirmasi Hapus
 if "konfirmasi_hapus_nik" in st.session_state:
     nik_target = st.session_state.konfirmasi_hapus_nik
-    df_anggota = ambil_data("Anggota")
+    df_anggota = ambil_data_anggota()
     try:
         nama_target = df_anggota[df_anggota['nik'] == nik_target].iloc[0]['nama']
     except:
