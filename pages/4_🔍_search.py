@@ -9,11 +9,11 @@ if "login" not in st.session_state or not st.session_state["login"]:
     st.stop()
 
 # 🔐 Google Sheets Setup
-def get_sheet(sheet_name):
+def get_sheet("Anggota"):
     scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
     creds = ServiceAccountCredentials.from_json_keyfile_dict(st.secrets["GOOGLE_SERVICE_ACCOUNT"], scope)
     client = gspread.authorize(creds)
-    return client.open_by_key("1OjCLeZmypzFvThwmKF2PjheHU2NKedQbw9qzt8joKvs").worksheet(sheet_name)
+    return client.open_by_key("1OjCLeZmypzFvThwmKF2PjheHU2NKedQbw9qzt8joKvs").worksheet("Anggota")
     
 def ambil_data_anggota():
     sheet = get_sheet("Anggota")
