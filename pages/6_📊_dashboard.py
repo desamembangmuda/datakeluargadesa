@@ -12,12 +12,9 @@ if "login" not in st.session_state or not st.session_state["login"]:
 # Fungsi koneksi ke Google Sheets
 def get_sheet():
     scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-    service_account_info = dict(st.secrets["GOOGLE_SERVICE_ACCOUNT"])
-    creds = ServiceAccountCredentials.from_json_keyfile_dict(service_account_info, scope)
+    creds = ServiceAccountCredentials.from_json_keyfile_name("service_account.json", scope)
     client = gspread.authorize(creds)
-    spreadsheet_id = "1OjCLeZmypzFvThwmKF2PjheHU2NKedQbw9qzt8joKvs"
-    sheet = client.open_by_key(spreadsheet_id).worksheet(Anggota)
-    return sheet
+    return client.open_by_key("1OjCLeZmypzFvThwmKF2PjheHU2NKedQbw9qzt8joKvs").worksheet("Anggota")
     
 # Ambil data
 def ambil_data():
