@@ -15,7 +15,7 @@ def get_sheet(sheet_name):
     creds = ServiceAccountCredentials.from_json_keyfile_dict(service_account_info, scope)
     client = gspread.authorize(creds)
     return client.open_by_key("1OjCLeZmypzFvThwmKF2PjheHU2NKedQbw9qzt8joKvs").worksheet(sheet_name)
-
+    
 def ambil_data_anggota():
     sheet = get_sheet("Anggota")
     data = sheet.get_all_values()
