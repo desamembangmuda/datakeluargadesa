@@ -15,8 +15,8 @@ if "no_kk" not in st.session_state:
 
 # Koneksi ke Google Sheets
 def get_sheet():
-    service_account_info = json.loads(st.secrets["GOOGLE_SERVICE_ACCOUNT"])
-    creds = ServiceAccountCredentials.from_json_keyfile_dict(service_account_info, scope)
+    scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
+    creds = ServiceAccountCredentials.from_json_keyfile_dict(st.secrets["GOOGLE_SERVICE_ACCOUNT"], scope)
     client = gspread.authorize(creds)
     return client.open_by_key("1OjCLeZmypzFvThwmKF2PjheHU2NKedQbw9qzt8joKvs").worksheet("Anggota")
 
