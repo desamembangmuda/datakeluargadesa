@@ -9,6 +9,7 @@ if "login" not in st.session_state or not st.session_state["login"]:
     st.stop()
 
 # 🔐 Google Sheets Setup
+st.write("🔍 Sedang membuka worksheet: Anggota")
 def get_sheet("Anggota"):
     scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
     creds = ServiceAccountCredentials.from_json_keyfile_dict(st.secrets["GOOGLE_SERVICE_ACCOUNT"], scope)
@@ -127,7 +128,7 @@ if no_kk_input:
                 st.switch_page("pages/2_👪_form_anggota.py")
     try:
         sheet = get_sheet("Anggota")
-        st.success("✅ Berhasil ambil sheet Anggota")
+        data = sheet.get_all_values()
         
     except Exception as e:
         st.error(f"❌ Gagal memuat data: {e}")
