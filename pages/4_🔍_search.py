@@ -98,7 +98,7 @@ if no_kk_input:
                             # st.write("🔍 Semua key dalam row:", list(row.keys()))
                             # st.write("📦 Data row:", row.to_dict())
 
-                            st.switch_page("3_👨‍👩‍👧‍👦_form_anggota.py")
+                            st.switch_page("pages/3_👨‍👩‍👧‍👦_form_anggota.py")
 
                     with cols[2]:
                         if st.button("🗑️ Hapus", key=f"hapus_{row['nik']}"):
@@ -113,7 +113,7 @@ if no_kk_input:
                             for k in list(st.session_state.keys()):
                                 if k.startswith("edit_"):
                                     del st.session_state[k]
-                            st.switch_page("3_👨‍👩‍👧‍👦_form_anggota.py")
+                            st.switch_page("pages/3_👨‍👩‍👧‍👦_form_anggota.py")
 
         else:
             st.warning("❗ Nomor KK valid tapi belum memiliki data anggota.")
@@ -124,7 +124,7 @@ if no_kk_input:
                 for k in list(st.session_state.keys()):
                     if k.startswith("edit_"):
                         del st.session_state[k]
-                st.switch_page("3_👨‍👩‍👧‍👦_form_anggota.py")
+                st.switch_page("pages/3_👨‍👩‍👧‍👦_form_anggota.py")
 
     except Exception as e:
         st.error(f"❌ Gagal memuat data: {e}")
