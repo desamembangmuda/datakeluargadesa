@@ -23,7 +23,7 @@ def is_no_kk_duplicate(no_kk):
 
 def simpan_ke_sheets(data):
     sheet = connect_sheet()
-    sheet.append_row([""] + data, value_input_option="USER_ENTERED")
+    sheet.append_row(data, value_input_option="USER_ENTERED")
 
 # ========= FORM INPUT =========
 st.set_page_config(page_title="Form Keluarga", layout="centered")
