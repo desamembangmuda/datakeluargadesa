@@ -179,7 +179,7 @@ if "flash_message" in st.session_state:
 
 # 🔙 Navigasi kembali
 if st.button("🔙 Kembali ke Form Keluarga"):
-    st.switch_page("2_👨‍👩‍👧‍👦_form_keluarga")
+    st.switch_page("pages/2_👨‍👩‍👧‍👦_form_keluarga.py")
     for key in ["anggota_ke", "jumlah_anggota", "anggota_data", "no_kk"]:
         if key in st.session_state:
             del st.session_state[key]
