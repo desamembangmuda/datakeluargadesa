@@ -11,7 +11,7 @@ st.set_page_config(page_title="Rekap per Dusun", layout="wide")
 st.title("📊 Rekap Data per Dusun")
 
 # --- Ambil data dari worksheet 'Anggota' ---
-sheet_url = "https://docs.google.com/spreadsheets/d/1OjCLeZmypzFvThwmKF2PjheHU2NKedQbw9qzt8joKvs/edit?gid=1082970516#gid=1082970516"
+sheet_url = "https://docs.google.com/spreadsheets/d/1OjCLeZmypzFvThwmKF2PjheHU2NKedQbw9qzt8joKvs/edit?gid=675368762"
 worksheet_name = "Anggota"
 
 worksheet = get_worksheet(worksheet_name)
