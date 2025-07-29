@@ -93,7 +93,7 @@ if submit:
             st.session_state.jumlah_anggota = int(jumlah_anggota)
 
             st.success("✅ Data keluarga berhasil disimpan!")
-            st.switch_page("pages/3_👨‍👩‍👧‍👦_form_anggota")
+            st.switch_page("pages/3_👨‍👩‍👧‍👦_form_anggota.py")
 
         except Exception as e:
             st.error(f"❌ Gagal menyimpan: {e}")
