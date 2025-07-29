@@ -69,25 +69,31 @@ try:
     col1, col2 = st.columns(2)
 
     with col1:
-        st.subheader("Distribusi Jenis Kelamin")
+        st.subheader("Jenis Kelamin")
         fig1 = px.pie(df, names="jenis kelamin", hole=0.4)
+        color_discrete_sequence=["orange"]
         st.plotly_chart(fig1, use_container_width=True)
 
     with col2:
-        st.subheader("Distribusi Ijazah Tertinggi")
+        st.subheader("Ijazah Tertinggi")
         pendidikan_count = df["ijazah"].value_counts().reset_index()
         pendidikan_count.columns = ["ijazah", "jumlah"]
-        fig2 = px.bar(pendidikan_count, x="ijazah", y="jumlah")
+        fig2 = px.bar(pendidikan_count, x="ijazah", y="jumlah"
+        color_discrete_sequence=px.colors.sequential.Orange
+        )
+
         st.plotly_chart(fig2, use_container_width=True)
 
     # Layout bawah
     col3, col4 = st.columns(2)
 
     with col3:
-        st.subheader("Distribusi Status Pekerjaan")
+        st.subheader("Status Pekerjaan")
         status_pekerjaan_count = df["status pekerjaan"].value_counts().reset_index()
         status_pekerjaan_count.columns = ["status", "jumlah"]
-        fig4 = px.bar(status_pekerjaan_count, x="status", y="jumlah")
+        fig4 = px.bar(status_pekerjaan_count, x="status", y="jumlah",
+        color_discrete_sequence=["orange"]
+        )
         st.plotly_chart(fig4, use_container_width=True)
 
     with col4:
@@ -106,7 +112,7 @@ try:
         fig5 = px.bar(
             piramida_df.reset_index().melt(id_vars='kelompok umur', value_name='jumlah'),
             x="jumlah", y="kelompok umur", color="jenis kelamin", orientation="h",
-            color_discrete_map={"Laki - Laki": "lightblue", "Perempuan": "lightpink"},
+            color_discrete_map={"Laki - Laki": "blue", "Perempuan": "orange"},
             labels={"jumlah": "Jumlah", "kelompok umur": "Kelompok Umur", "jenis kelamin": "Jenis Kelamin"},
             title="Piramida Penduduk"
         )
