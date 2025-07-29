@@ -71,17 +71,13 @@ try:
     with col1:
         st.subheader("Jenis Kelamin")
         fig1 = px.pie(df, names="jenis kelamin", hole=0.4)
-        color_discrete_sequence=["orange"]
         st.plotly_chart(fig1, use_container_width=True)
 
     with col2:
         st.subheader("Ijazah Tertinggi")
         pendidikan_count = df["ijazah"].value_counts().reset_index()
         pendidikan_count.columns = ["ijazah", "jumlah"]
-        fig2 = px.bar(pendidikan_count, x="ijazah", y="jumlah"
-        color_discrete_sequence=px.colors.sequential.Orange
-        )
-
+        fig2 = px.bar(pendidikan_count, x="ijazah", y="jumlah")
         st.plotly_chart(fig2, use_container_width=True)
 
     # Layout bawah
@@ -91,9 +87,7 @@ try:
         st.subheader("Status Pekerjaan")
         status_pekerjaan_count = df["status pekerjaan"].value_counts().reset_index()
         status_pekerjaan_count.columns = ["status", "jumlah"]
-        fig4 = px.bar(status_pekerjaan_count, x="status", y="jumlah",
-        color_discrete_sequence=["orange"]
-        )
+        fig4 = px.bar(status_pekerjaan_count, x="status", y="jumlah",)
         st.plotly_chart(fig4, use_container_width=True)
 
     with col4:
