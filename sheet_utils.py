@@ -13,9 +13,7 @@ def get_worksheet(worksheet_name: str):
             "https://www.googleapis.com/auth/spreadsheets",
             "https://www.googleapis.com/auth/drive"
         ]
-        creds = ServiceAccountCredentials.from_json_keyfile_dict(
-            st.secrets["google_service_account"], scope
-        )
+        creds = ServiceAccountCredentials.from_json_keyfile_dict(st.secrets["GOOGLE_SERVICE_ACCOUNT"], scope)
         client = gspread.authorize(creds)
 
         sheet_url = st.secrets["sheet_url"]

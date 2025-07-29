@@ -11,9 +11,9 @@ from datetime import datetime
 # 🔐 Google Sheets Setup
 def get_sheet(sheet_name):
     scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-    creds = ServiceAccountCredentials.from_json_keyfile_dict(st.secrets["google_service_account"], scope)
+    creds = ServiceAccountCredentials.from_json_keyfile_dict(st.secrets["GOOGLE_SERVICE_ACCOUNT"], scope)
     client = gspread.authorize(creds)
-    return client.open_by_key("1LOv15OJL__vKiok8qmJqPGt4Je4nmxVSV0_a0ed8L5w").worksheet(sheet_name)
+    return client.open_by_key("1OjCLeZmypzFvThwmKF2PjheHU2NKedQbw9qzt8joKvs").worksheet(sheet_name)
 
 def ambil_data_anggota():
     sheet = get_sheet("Anggota")
@@ -98,7 +98,7 @@ if no_kk_input:
                             # st.write("🔍 Semua key dalam row:", list(row.keys()))
                             # st.write("📦 Data row:", row.to_dict())
 
-                            st.switch_page("pages/3_form_anggota.py")
+                            st.switch_page("3_👨‍👩‍👧‍👦_form_anggota.py")
 
                     with cols[2]:
                         if st.button("🗑️ Hapus", key=f"hapus_{row['nik']}"):
@@ -113,7 +113,7 @@ if no_kk_input:
                             for k in list(st.session_state.keys()):
                                 if k.startswith("edit_"):
                                     del st.session_state[k]
-                            st.switch_page("pages/3_form_anggota.py")
+                            st.switch_page("3_👨‍👩‍👧‍👦_form_anggota.py")
 
         else:
             st.warning("❗ Nomor KK valid tapi belum memiliki data anggota.")
@@ -124,7 +124,7 @@ if no_kk_input:
                 for k in list(st.session_state.keys()):
                     if k.startswith("edit_"):
                         del st.session_state[k]
-                st.switch_page("pages/3_form_anggota.py")
+                st.switch_page("3_👨‍👩‍👧‍👦_form_anggota.py")
 
     except Exception as e:
         st.error(f"❌ Gagal memuat data: {e}")
