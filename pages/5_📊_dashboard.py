@@ -35,7 +35,7 @@ try:
         st.stop()
 
     # Bersihkan string & hilangkan baris dengan data penting kosong
-    df = df.applymap(lambda x: x.strip() if isinstance(x, str) else x)
+    df = df.map(lambda x: x.strip() if isinstance(x, str) else x)
     kolom_penting = ["jenis kelamin", "ijazah", "status pekerjaan", "kelompok umur"]
     df = df.dropna(subset=kolom_penting)
     for kolom in kolom_penting:
